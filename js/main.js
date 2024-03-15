@@ -1,5 +1,5 @@
 // 페이지 로드 시 이전 상태 복원
-document.addEventListener("DOMContentLoaded", event => {
+document.addEventListener("DOMContentLoaded", (event) => {
   const buckets = document.querySelectorAll(".bucket");
   buckets.forEach((bucket, index) => {
     // 로컬 스토리지에서 상태 읽기
@@ -23,39 +23,32 @@ function saveTodos() {
 function deleteTodo(event) {
   const li = event.target.parentElement;
   console.log("delete");
-  todos = todos.filter(todo => todo.id !== parseInt(li.id));
+  todos = todos.filter((todo) => todo.id !== parseInt(li.id));
   saveTodos();
   li.remove();
 }
 
 function doneTodo(event) {
-  console.log("done");
-  const li = event.target.parentElement;
-  console.log(li.id);
-  todos = todos.map(todo => {
+  const li = event.target;
+  // if done =true 이면 false, 아니면 true
+  console.log("done", li);
+  todos = todos.map((todo) => {
     console.log("todo", todo);
     if (todo.id === parseInt(li.id)) {
-      todo.done = true;
-    } else {
-      todo.done = false;
+      if (todo.done === false) {
+        todo.done = true;
+        li.classList.add("done");
+      } else {
+        todo.done = false;
+        li.classList.remove("done");
+      }
     }
+    return todo;
   });
-  console.log(todos);
   saveTodos();
-  li.remove();
 }
 
-// 버킷 리스트 클릭 이벤트
-// const buckets = document.querySelectorAll(".bucket");
-// buckets.forEach((bucket, index) => {
-//   bucket.addEventListener("click", function () {
-//     // 클래스 토글
-//     bucket.classList.toggle("done");
-
-//     doneTodo(bucket);
-//   });
-// });
-
+/** 리스트에 하나 추가 */
 function paintTodo(newTodoObj) {
   const li = document.createElement("li");
 
@@ -66,7 +59,7 @@ function paintTodo(newTodoObj) {
   button.innerText = "";
   button.className = "delete is-small";
   if (newTodoObj.done === true) {
-    li.className = "done";
+    li.classList.add("done");
   }
   li.addEventListener("click", doneTodo);
   button.addEventListener("click", deleteTodo);
@@ -89,14 +82,16 @@ function handleTodoSubmit(event) {
   paintTodo(newTodoObj);
   saveTodos();
 }
+
 addBtn.addEventListener("click", handleTodoSubmit);
 todoForm.addEventListener("submit", handleTodoSubmit);
 
 const savedTodos = localStorage.getItem(TODOS_KEY);
+
 if (savedTodos !== null) {
   const parsedTodos = JSON.parse(savedTodos);
   todos = parsedTodos;
-  todos.forEach(value => {
+  todos.forEach((value) => {
     paintTodo(value);
   });
 }

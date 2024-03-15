@@ -8,6 +8,10 @@ ul {
   padding: 0;
   margin: 0;
 }
+
+li > span {
+  pointer-events: none;
+}
 .bg {
   background-image: url("./assets/images/벚꽃배경1.jpg");
   background-size: cover;
