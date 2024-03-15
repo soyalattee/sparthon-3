@@ -76,7 +76,7 @@ function handleTodoSubmit(event) {
   const newTodoObj = {
     text: newTodo,
     id: Date.now(),
-    done: true,
+    done: false,
   };
   todos.push(newTodoObj);
   paintTodo(newTodoObj);
